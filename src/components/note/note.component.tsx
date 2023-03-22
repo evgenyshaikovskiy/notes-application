@@ -4,6 +4,8 @@ import { StorageContext } from "../../contexts/storage-provider";
 import { ModalWindow } from "../modal/modal.component";
 import { NoteForm } from "../note-form/note-form";
 
+import './note.styles.css'
+
 export const NoteComponent = ({ note }: { note: Note }) => {
   const { removeNote } = useContext(StorageContext);
   const [visible, setVisible] = useState(false);
@@ -13,16 +15,12 @@ export const NoteComponent = ({ note }: { note: Note }) => {
       <div className="note-content-wrapper">
         <div className="note-hashtags-list">{note.hashtags.join(" ")}</div>
         <div className="note-content">{note.content}</div>
-        <div className="note-action-btns">
-          <button className="edit-note-btn" onClick={() => setVisible(true)}>
-            Edit
-          </button>
-          <button
-            className="remove-note-btn"
-            onClick={() => removeNote(note.id)}
-          >
-            Remove
-          </button>
+        <div className="note-action-icons">
+          <i
+            className="bi bi-pen action-icon"
+            onClick={() => setVisible(true)}
+          ></i>
+          <i className="bi bi-trash action-icon" onClick={() => removeNote(note.id)}></i>
         </div>
       </div>
       <ModalWindow visible={visible} setVisible={setVisible}>
