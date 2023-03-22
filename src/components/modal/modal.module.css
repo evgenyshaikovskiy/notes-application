@@ -1,0 +1,20 @@
+.appModal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: none;
+  background: rgba(19, 19, 19,0.7);
+}
+
+.appModalContent {
+  padding: 25px;
+  background-color: rgb(215, 215, 215);
+}
+
+.appModal.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
