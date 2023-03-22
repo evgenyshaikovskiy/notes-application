@@ -18,11 +18,11 @@ interface FormErrors {
 export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   const { addNote, editNote } = useContext(StorageContext);
 
-  const [hashtagsInputValue, setHashtagsInputValue] = useState<string>(
+  const [hashtags, setHashtags] = useState<string>(
     note ? note.hashtags.join(" ") : ""
   );
 
-  const [noteContentValue, setNoteContentValue] = useState<string>(
+  const [content, setContent] = useState<string>(
     note ? note.content : ""
   );
 
@@ -31,7 +31,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
     contentError: "",
   });
 
-  const validateHashtagInput = (hashtags: string) => {
+  const validateHashtags = (hashtags: string) => {
     if (!hashtags) {
       return "Hashtags are required to create the note.";
     } else if (
@@ -53,7 +53,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
     return "";
   };
 
-  const validateContentInput = (content: string) => {
+  const validateContents = (content: string) => {
     if (!content) {
       return "Content is required to create the note.";
     }
@@ -63,21 +63,21 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
 
   const handleHashtagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHashtagValue = e.target.value;
-    setHashtagsInputValue(newHashtagValue);
+    setHashtags(newHashtagValue);
     setErrors((prevState) => ({
       ...prevState,
-      hashtagError: validateHashtagInput(newHashtagValue),
+      hashtagError: validateHashtags(newHashtagValue),
     }));
   };
 
   const handleContentTextareaChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    const newContentValue = e.target.value;
-    setNoteContentValue(newContentValue);
+    const newContent = e.target.value;
+    setContent(newContent);
     setErrors((prevState) => ({
       ...prevState,
-      contentError: validateContentInput(newContentValue),
+      contentError: validateContents(newContent),
     }));
   };
 
@@ -91,29 +91,29 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
     if (note) {
       // edit flow
       editNote({
-        content: noteContentValue,
-        hashtags: hashtagsInputValue.split(" "),
+        content: content,
+        hashtags: hashtags.split(" "),
         id: note.id,
       });
     } else {
       // create flow
-      addNote(noteContentValue, hashtagsInputValue.split(" "));
-      setHashtagsInputValue('');
-      setNoteContentValue('');
+      addNote(content, hashtags.split(" "));
+      setHashtags('');
+      setContent('');
     }
 
     onSubmitCallback();
   };
 
   const mergeHashtagsFromContent = () => {
-    if (noteContentValue) {
+    if (content) {
       const newHashtagValue = getDistinctValues(
-        hashtagsInputValue.split(" ").concat(parseHashtags(noteContentValue))
+        hashtags.split(" ").concat(parseHashtags(content))
       ).join(" ");
-      setHashtagsInputValue(newHashtagValue);
+      setContent(newHashtagValue);
       setErrors((prevState) => ({
         ...prevState,
-        hashtagError: validateHashtagInput(newHashtagValue),
+        hashtagError: validateHashtags(newHashtagValue),
       }));
     }
   };
@@ -125,7 +125,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
     }, 3000);
 
     return () => clearTimeout(mergingDelayTimer);
-  }, [noteContentValue]);
+  }, [content]);
 
   return (
     <div className="note-form-wrapper">
@@ -134,7 +134,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
           type="text"
           className="hashtag-input"
           placeholder="Provide hashtags for note"
-          value={hashtagsInputValue}
+          value={hashtags}
           onChange={handleHashtagInputChange}
         ></input>
 
@@ -147,7 +147,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
         <textarea
           className="content-textarea"
           placeholder="Provide text for note"
-          value={noteContentValue}
+          value={content}
           onChange={handleContentTextareaChange}
         ></textarea>
         {errors.contentError && (
