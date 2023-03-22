@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Note } from "../../types";
+import { getDistinctValues, parseHashtags } from "../../utils";
+import { StorageContext } from "../../contexts/storage-provider";
 
 // if editing the note, then provide note
 // else creating the note
 type NoteFormProps = {
   note?: Note;
+  onSubmitCallback: () => void;
 };
 
 interface FormErrors {
@@ -12,7 +15,9 @@ interface FormErrors {
   contentError: string;
 }
 
-export const NoteForm = ({ note }: NoteFormProps) => {
+export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
+  const { addNote, editNote } = useContext(StorageContext);
+
   const [hashtagsInputValue, setHashtagsInputValue] = useState<string>(
     note ? note.hashtags.join(" ") : ""
   );
@@ -81,8 +86,46 @@ export const NoteForm = ({ note }: NoteFormProps) => {
       return;
     }
 
-    console.log("valid form");
+    mergeHashtagsFromContent();
+
+    if (note) {
+      // edit flow
+      editNote({
+        content: noteContentValue,
+        hashtags: hashtagsInputValue.split(" "),
+        id: note.id,
+      });
+    } else {
+      // create flow
+      addNote(noteContentValue, hashtagsInputValue.split(" "));
+      setHashtagsInputValue('');
+      setNoteContentValue('');
+    }
+
+    onSubmitCallback();
   };
+
+  const mergeHashtagsFromContent = () => {
+    if (noteContentValue) {
+      const newHashtagValue = getDistinctValues(
+        hashtagsInputValue.split(" ").concat(parseHashtags(noteContentValue))
+      ).join(" ");
+      setHashtagsInputValue(newHashtagValue);
+      setErrors((prevState) => ({
+        ...prevState,
+        hashtagError: validateHashtagInput(newHashtagValue),
+      }));
+    }
+  };
+
+  // merging tags from content input to hashtag input
+  useEffect(() => {
+    const mergingDelayTimer = setTimeout(() => {
+      mergeHashtagsFromContent();
+    }, 3000);
+
+    return () => clearTimeout(mergingDelayTimer);
+  }, [noteContentValue]);
 
   return (
     <div className="note-form-wrapper">

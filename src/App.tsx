@@ -27,7 +27,7 @@ function App() {
       </div>
 
       <ModalWindow visible={visible} setVisible={setVisible}>
-        <NoteForm></NoteForm>
+        <NoteForm onSubmitCallback={() => setVisible(false)}></NoteForm>
       </ModalWindow>
     </div>
   );

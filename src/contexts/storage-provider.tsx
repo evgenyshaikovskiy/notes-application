@@ -7,7 +7,7 @@ interface StorageContextType {
   notes: Note[];
   addNote: (content: string, hashtags: string[]) => void;
   removeNote: (id: number) => void;
-  editNote: (newNote: Note, id: number) => void;
+  editNote: (newNote: Note) => void;
 }
 
 export const StorageContext = createContext<StorageContextType>({
@@ -63,8 +63,10 @@ export const StorageContextProvider = ({
     updateNotesFromStorage();
   };
 
-  const editNote = (newNote: Note, id: number) => {
-    setNotes([...notes]);
+  const editNote = (newNote: Note) => {
+    localStorage.clear();
+    localStorage.setItem("notes", JSON.stringify([...notes.filter((note) => note.id !== newNote.id), newNote]));
+    updateNotesFromStorage();
   };
 
   const value = {
