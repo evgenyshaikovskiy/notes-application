@@ -4,7 +4,7 @@ import { StorageContext } from "../../contexts/storage.context";
 import { ModalWindow } from "../modal/modal.component";
 import { NoteForm } from "../note-form/note-form";
 
-import './note.styles.css'
+import "./note.styles.css";
 
 export const NoteComponent = ({ note }: { note: Note }) => {
   const { removeNote } = useContext(StorageContext);
@@ -20,7 +20,10 @@ export const NoteComponent = ({ note }: { note: Note }) => {
             className="bi bi-pen action-icon"
             onClick={() => setVisible(true)}
           ></i>
-          <i className="bi bi-trash action-icon" onClick={() => removeNote(note.id)}></i>
+          <i
+            className="bi bi-trash action-icon"
+            onClick={() => removeNote(note.id)}
+          ></i>
         </div>
       </div>
       <ModalWindow visible={visible} setVisible={setVisible}>

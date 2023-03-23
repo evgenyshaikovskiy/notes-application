@@ -16,7 +16,9 @@ export interface StorageContextType {
   editNote: (newNote: Note) => void;
 }
 
-export interface NoteFormContextType {
+export interface NoteContextType {
+  note?: Note;
+
   hashtags: string;
   content: string;
   formErrors: NoteFormErrors;

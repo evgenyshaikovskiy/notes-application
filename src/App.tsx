@@ -5,7 +5,7 @@ import { ModalWindow } from "./components/modal/modal.component";
 import { NoteForm } from "./components/note-form/note-form";
 
 function App() {
-  const { notes, addNote } = useContext(StorageContext);
+  const { notes } = useContext(StorageContext);
   const [visible, setVisible] = useState(false);
 
   return (

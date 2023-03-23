@@ -5,7 +5,6 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StorageContextProvider } from "./contexts/storage.context";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { NoteFormContextProvider } from "./contexts/note.context";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,9 +12,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <StorageContextProvider>
-      <NoteFormContextProvider>
-        <App />
-      </NoteFormContextProvider>
+      <App />
     </StorageContextProvider>
   </React.StrictMode>
 );

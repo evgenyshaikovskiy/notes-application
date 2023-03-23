@@ -6,7 +6,6 @@ export const parseHashtags = (text: string): string[] =>
     .filter((word) => word.startsWith("#"))
     .filter((hashtags) => hashtags.length > 1);
 
-
 export const getDistinctValues = (array: string[]) => {
   const copy = array.concat();
   for (let i = 0; i < copy.length; ++i) {
@@ -18,7 +17,38 @@ export const getDistinctValues = (array: string[]) => {
   }
 
   return copy;
-}
+};
+
+// validators
+export const validateContent = (content: string) => {
+  if (!content) {
+    return "Content is required to create the note.";
+  }
+
+  return "";
+};
+
+export const validateHashtags = (hashtags: string) => {
+  if (!hashtags) {
+    return "Hashtags are required to create the note.";
+  } else if (
+    !hashtags
+      .split(" ")
+      .filter((word) => word.length !== 0)
+      .every((word) => word.startsWith("#"))
+  ) {
+    return `Please, make sure that every hashtag has '#' before.`;
+  } else if (
+    !hashtags
+      .split(" ")
+      .filter((word) => word.length !== 0)
+      .every((word) => word.length > 1)
+  ) {
+    return `Please, do not create empty hashtags.`;
+  }
+
+  return "";
+};
 
 // also possible
 // export const parseHashtagsRegularExpression = (text: string): string[] => {
