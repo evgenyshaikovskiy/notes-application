@@ -1,14 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { ReactNode, useEffect, useState } from "react";
 import { createContext } from "react";
-import { Note } from "../types";
-
-interface StorageContextType {
-  notes: Note[];
-  addNote: (content: string, hashtags: string[]) => void;
-  removeNote: (id: number) => void;
-  editNote: (newNote: Note) => void;
-}
+import { Note, StorageContextType } from "../types";
 
 export const StorageContext = createContext<StorageContextType>({
   notes: [],
@@ -59,13 +52,22 @@ export const StorageContextProvider = ({
 
   const removeNote = (id: number) => {
     localStorage.clear();
-    localStorage.setItem("notes", JSON.stringify([...notes.filter((note) => note.id !== id)]));
+    localStorage.setItem(
+      "notes",
+      JSON.stringify([...notes.filter((note) => note.id !== id)])
+    );
     updateNotesFromStorage();
   };
 
   const editNote = (newNote: Note) => {
     localStorage.clear();
-    localStorage.setItem("notes", JSON.stringify([...notes.filter((note) => note.id !== newNote.id), newNote]));
+    localStorage.setItem(
+      "notes",
+      JSON.stringify([
+        ...notes.filter((note) => note.id !== newNote.id),
+        newNote,
+      ])
+    );
     updateNotesFromStorage();
   };
 

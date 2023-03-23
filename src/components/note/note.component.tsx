@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Note } from "../../types";
-import { StorageContext } from "../../contexts/storage-provider";
+import { StorageContext } from "../../contexts/storage.context";
 import { ModalWindow } from "../modal/modal.component";
 import { NoteForm } from "../note-form/note-form";
 

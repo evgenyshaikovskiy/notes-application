@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from "react";
-import { Note } from "../../types";
-import { getDistinctValues, parseHashtags } from "../../utils";
-import { StorageContext } from "../../contexts/storage-provider";
+import { useContext } from "react";
+import {  Note } from "../../types";
+import { NoteFormContext } from "../../contexts/note.context";
 
 // if editing the note, then provide note
 // else creating the note
@@ -10,122 +9,126 @@ type NoteFormProps = {
   onSubmitCallback: () => void;
 };
 
-interface FormErrors {
-  hashtagError: string;
-  contentError: string;
-}
-
 export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
-  const { addNote, editNote } = useContext(StorageContext);
+  const {
+    hashtags,
+    content,
+    formErrors,
+    setContent,
+    setHashtags,
+    onFormSubmit,
+  } = useContext(NoteFormContext);
 
-  const [hashtags, setHashtags] = useState<string>(
-    note ? note.hashtags.join(" ") : ""
-  );
+  // const { addNote, editNote } = useContext(StorageContext);
 
-  const [content, setContent] = useState<string>(
-    note ? note.content : ""
-  );
+  // const [hashtags, setHashtags] = useState<string>(
+  //   note ? note.hashtags.join(" ") : ""
+  // );
 
-  const [errors, setErrors] = useState<FormErrors>({
-    hashtagError: "",
-    contentError: "",
-  });
+  // const [content, setContent] = useState<string>(
+  //   note ? note.content : ""
+  // );
 
-  const validateHashtags = (hashtags: string) => {
-    if (!hashtags) {
-      return "Hashtags are required to create the note.";
-    } else if (
-      !hashtags
-        .split(" ")
-        .filter((word) => word.length !== 0)
-        .every((word) => word.startsWith("#"))
-    ) {
-      return `Please, make sure that every hashtag has '#' before.`;
-    } else if (
-      !hashtags
-        .split(" ")
-        .filter((word) => word.length !== 0)
-        .every((word) => word.length > 1)
-    ) {
-      return `Please, do not create empty hashtags.`;
-    }
+  // const [errors, setErrors] = useState<NoteFormErrors>({
+  //   hashtagError: "",
+  //   contentError: "",
+  // });
 
-    return "";
-  };
+  // const validateHashtags = (hashtags: string) => {
+  //   if (!hashtags) {
+  //     return "Hashtags are required to create the note.";
+  //   } else if (
+  //     !hashtags
+  //       .split(" ")
+  //       .filter((word) => word.length !== 0)
+  //       .every((word) => word.startsWith("#"))
+  //   ) {
+  //     return `Please, make sure that every hashtag has '#' before.`;
+  //   } else if (
+  //     !hashtags
+  //       .split(" ")
+  //       .filter((word) => word.length !== 0)
+  //       .every((word) => word.length > 1)
+  //   ) {
+  //     return `Please, do not create empty hashtags.`;
+  //   }
 
-  const validateContents = (content: string) => {
-    if (!content) {
-      return "Content is required to create the note.";
-    }
+  //   return "";
+  // };
 
-    return "";
-  };
+  // const validateContents = (content: string) => {
+  //   if (!content) {
+  //     return "Content is required to create the note.";
+  //   }
 
-  const handleHashtagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newHashtagValue = e.target.value;
-    setHashtags(newHashtagValue);
-    setErrors((prevState) => ({
-      ...prevState,
-      hashtagError: validateHashtags(newHashtagValue),
-    }));
-  };
+  //   return "";
+  // };
 
-  const handleContentTextareaChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    const newContent = e.target.value;
-    setContent(newContent);
-    setErrors((prevState) => ({
-      ...prevState,
-      contentError: validateContents(newContent),
-    }));
-  };
+  // const handleHashtagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newHashtagValue = e.target.value;
+  //   setHashtags(newHashtagValue);
+  //   setErrors((prevState) => ({
+  //     ...prevState,
+  //     hashtagError: validateHashtags(newHashtagValue),
+  //   }));
+  // };
 
-  const handleFormSubmit = () => {
-    if (errors.contentError || errors.hashtagError) {
-      return;
-    }
+  // const handleContentTextareaChange = (
+  //   e: React.ChangeEvent<HTMLTextAreaElement>
+  // ) => {
+  //   const newContent = e.target.value;
+  //   setContent(newContent);
+  //   setErrors((prevState) => ({
+  //     ...prevState,
+  //     contentError: validateContents(newContent),
+  //   }));
+  // };
 
-    mergeHashtagsFromContent();
+  // const handleFormSubmit = () => {
+  //   if (errors.contentError || errors.hashtagError) {
+  //     return;
+  //   }
 
-    if (note) {
-      // edit flow
-      editNote({
-        content: content,
-        hashtags: hashtags.split(" "),
-        id: note.id,
-      });
-    } else {
-      // create flow
-      addNote(content, hashtags.split(" "));
-      setHashtags('');
-      setContent('');
-    }
+  //   mergeHashtagsFromContent();
 
-    onSubmitCallback();
-  };
+  //   if (note) {
+  //     // edit flow
+  //     editNote({
+  //       content: content,
+  //       hashtags: hashtags.split(" "),
+  //       id: note.id,
+  //     });
+  //   } else {
+  //     // create flow
+  //     addNote(content, hashtags.split(" "));
+  //     setHashtags('');
+  //     setContent('');
+  //   }
 
-  const mergeHashtagsFromContent = () => {
-    if (content) {
-      const newHashtagValue = getDistinctValues(
-        hashtags.split(" ").concat(parseHashtags(content))
-      ).join(" ");
-      setContent(newHashtagValue);
-      setErrors((prevState) => ({
-        ...prevState,
-        hashtagError: validateHashtags(newHashtagValue),
-      }));
-    }
-  };
+  //   onSubmitCallback();
+  // };
 
-  // merging tags from content input to hashtag input
-  useEffect(() => {
-    const mergingDelayTimer = setTimeout(() => {
-      mergeHashtagsFromContent();
-    }, 3000);
+  // const mergeHashtagsFromContent = () => {
+  //   if (content) {
+  //     const newHashtagValue = getDistinctValues(
+  //       hashtags.split(" ").concat(parseHashtags(content))
+  //     ).join(" ");
+  //     setContent(newHashtagValue);
+  //     setErrors((prevState) => ({
+  //       ...prevState,
+  //       hashtagError: validateHashtags(newHashtagValue),
+  //     }));
+  //   }
+  // };
 
-    return () => clearTimeout(mergingDelayTimer);
-  }, [content]);
+  // // merging tags from content input to hashtag input
+  // useEffect(() => {
+  //   const mergingDelayTimer = setTimeout(() => {
+  //     mergeHashtagsFromContent();
+  //   }, 3000);
+
+  //   return () => clearTimeout(mergingDelayTimer);
+  // }, [content]);
 
   return (
     <div className="note-form-wrapper">
@@ -135,11 +138,11 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
           className="hashtag-input"
           placeholder="Provide hashtags for note"
           value={hashtags}
-          onChange={handleHashtagInputChange}
+          onChange={(e) => setHashtags(e.target.value)}
         ></input>
 
-        {errors.hashtagError && (
-          <div className="tooltip">{errors.hashtagError}</div>
+        {formErrors.hashtagError && (
+          <div className="tooltip">{formErrors.hashtagError}</div>
         )}
       </div>
 
@@ -148,15 +151,19 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
           className="content-textarea"
           placeholder="Provide text for note"
           value={content}
-          onChange={handleContentTextareaChange}
+          onChange={(e) => setContent(e.target.value)}
         ></textarea>
-        {errors.contentError && (
-          <div className="tooltip">{errors.contentError}</div>
+        {formErrors.contentError && (
+          <div className="tooltip">{formErrors.contentError}</div>
         )}
       </div>
 
       <div className="submit-btn-wrapper">
-        <button className="submit-btn" type="button" onClick={handleFormSubmit}>
+        <button
+          className="submit-btn"
+          type="button"
+          onClick={() => onFormSubmit(onSubmitCallback, note)}
+        >
           Submit
         </button>
       </div>
