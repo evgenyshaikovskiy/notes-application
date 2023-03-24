@@ -28,6 +28,18 @@ export const validateContent = (content: string) => {
   return "";
 };
 
+export const validateHashtag = (hashtag: string) => {
+  if (!hashtag) {
+    return "Hashtag cannot be empty.";
+  } else if (!hashtag.startsWith("#")) {
+    return `Hashtag must start within '#' symbol.`;
+  } else if (hashtag.split(" ").length > 1) {
+    return "Hashtag cannot contain whitespace.";
+  }
+
+  return '';
+};
+
 export const validateHashtags = (hashtags: string) => {
   if (!hashtags) {
     return "Hashtags are required to create the note.";

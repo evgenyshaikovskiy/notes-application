@@ -1,0 +1,17 @@
+.hashtag-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.hashtag-input {
+  outline: 0;
+  border: none;
+  width: 100px;
+  height: 20px;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 20px;
+}

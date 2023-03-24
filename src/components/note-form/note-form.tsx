@@ -1,6 +1,16 @@
-import { useContext } from "react";
-import {  Note } from "../../types";
-import { NoteFormContext } from "../../contexts/note.context";
+/* eslint-disable react/prop-types */
+import "./note-form.styles.css";
+
+import { useContext, useEffect, useState } from "react";
+import { Note, NoteFormErrors } from "../../types";
+import { HashtagComponent } from "../hashtag/hashtag.component";
+import {
+  validateContent,
+  validateHashtags,
+  getDistinctValues,
+  parseHashtags,
+} from "../../utils";
+import { StorageContext } from "../../contexts/storage.context";
 
 // if editing the note, then provide note
 // else creating the note
@@ -10,139 +20,118 @@ type NoteFormProps = {
 };
 
 export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
-  const {
-    hashtags,
-    content,
-    formErrors,
-    setContent,
-    setHashtags,
-    onFormSubmit,
-  } = useContext(NoteFormContext);
+  // used contexts
+  const { editNote, addNote } = useContext(StorageContext);
 
-  // const { addNote, editNote } = useContext(StorageContext);
+  // states
+  const [hashtags, setHashtags] = useState<string>(
+    note ? note.hashtags.join(" ") : ""
+  );
+  const [content, setContent] = useState<string>(note ? note.content : "");
+  const [errors, setErrors] = useState<NoteFormErrors>({
+    hashtagError: "",
+    contentError: "",
+  });
 
-  // const [hashtags, setHashtags] = useState<string>(
-  //   note ? note.hashtags.join(" ") : ""
-  // );
+  const [isEditFinished, setIsEditFinished] = useState<boolean>(true);
 
-  // const [content, setContent] = useState<string>(
-  //   note ? note.content : ""
-  // );
+  // handlers
+  const handleContentChange = (content: string) => {
+    setContent(content);
+    setErrors((prevState) => ({
+      ...prevState,
+      contentError: validateContent(content),
+    }));
+  };
 
-  // const [errors, setErrors] = useState<NoteFormErrors>({
-  //   hashtagError: "",
-  //   contentError: "",
-  // });
+  const addNewHashtag = () => {
+    setHashtags(hashtags.concat(" #"));
+    console.log(hashtags);
+  };
 
-  // const validateHashtags = (hashtags: string) => {
-  //   if (!hashtags) {
-  //     return "Hashtags are required to create the note.";
-  //   } else if (
-  //     !hashtags
-  //       .split(" ")
-  //       .filter((word) => word.length !== 0)
-  //       .every((word) => word.startsWith("#"))
-  //   ) {
-  //     return `Please, make sure that every hashtag has '#' before.`;
-  //   } else if (
-  //     !hashtags
-  //       .split(" ")
-  //       .filter((word) => word.length !== 0)
-  //       .every((word) => word.length > 1)
-  //   ) {
-  //     return `Please, do not create empty hashtags.`;
-  //   }
+  // utility
+  const mergeHashtagsFromContent = () => {
+    if (content) {
+      const newHashtagValue = mergeHashtags();
+      setHashtags(newHashtagValue);
+      setErrors((prevState) => ({
+        ...prevState,
+        hashtagError: validateHashtags(newHashtagValue),
+      }));
+    }
+  };
 
-  //   return "";
-  // };
+  const mergeHashtags = () =>
+    getDistinctValues(hashtags.split(" ").concat(parseHashtags(content))).join(
+      " "
+    );
 
-  // const validateContents = (content: string) => {
-  //   if (!content) {
-  //     return "Content is required to create the note.";
-  //   }
+  // merging tags from content input to hashtag input
+  useEffect(() => {
+    const mergingDelayTimer = setTimeout(() => {
+      mergeHashtagsFromContent();
+    }, 3000);
 
-  //   return "";
-  // };
+    return () => clearTimeout(mergingDelayTimer);
+  }, [content]);
 
-  // const handleHashtagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const newHashtagValue = e.target.value;
-  //   setHashtags(newHashtagValue);
-  //   setErrors((prevState) => ({
-  //     ...prevState,
-  //     hashtagError: validateHashtags(newHashtagValue),
-  //   }));
-  // };
+  const formSubmit = (onSubmitCallback: () => void, note?: Note) => {
+    console.log(hashtags);
 
-  // const handleContentTextareaChange = (
-  //   e: React.ChangeEvent<HTMLTextAreaElement>
-  // ) => {
-  //   const newContent = e.target.value;
-  //   setContent(newContent);
-  //   setErrors((prevState) => ({
-  //     ...prevState,
-  //     contentError: validateContents(newContent),
-  //   }));
-  // };
+    if (!isEditFinished) {
+      console.log("didnt finish all hashtags");
+      return;
+    }
 
-  // const handleFormSubmit = () => {
-  //   if (errors.contentError || errors.hashtagError) {
-  //     return;
-  //   }
+    const actualHashtagValue = mergeHashtags();
+    const contentError = validateContent(content);
+    const hashtagError = validateHashtags(actualHashtagValue);
+    if (contentError || hashtagError) {
+      setErrors(() => ({
+        hashtagError: hashtagError,
+        contentError: contentError,
+      }));
+      return;
+    }
 
-  //   mergeHashtagsFromContent();
+    if (note) {
+      // edit flow
+      editNote({
+        content: content,
+        hashtags: actualHashtagValue.split(" "),
+        id: note.id,
+      });
+    } else {
+      // create flow
+      addNote(content, actualHashtagValue.split(" "));
+      setHashtags("");
+      setContent("");
+    }
 
-  //   if (note) {
-  //     // edit flow
-  //     editNote({
-  //       content: content,
-  //       hashtags: hashtags.split(" "),
-  //       id: note.id,
-  //     });
-  //   } else {
-  //     // create flow
-  //     addNote(content, hashtags.split(" "));
-  //     setHashtags('');
-  //     setContent('');
-  //   }
-
-  //   onSubmitCallback();
-  // };
-
-  // const mergeHashtagsFromContent = () => {
-  //   if (content) {
-  //     const newHashtagValue = getDistinctValues(
-  //       hashtags.split(" ").concat(parseHashtags(content))
-  //     ).join(" ");
-  //     setContent(newHashtagValue);
-  //     setErrors((prevState) => ({
-  //       ...prevState,
-  //       hashtagError: validateHashtags(newHashtagValue),
-  //     }));
-  //   }
-  // };
-
-  // // merging tags from content input to hashtag input
-  // useEffect(() => {
-  //   const mergingDelayTimer = setTimeout(() => {
-  //     mergeHashtagsFromContent();
-  //   }, 3000);
-
-  //   return () => clearTimeout(mergingDelayTimer);
-  // }, [content]);
+    onSubmitCallback();
+  };
 
   return (
     <div className="note-form-wrapper">
       <div className="hashtag-input-wrapper">
-        <input
-          type="text"
-          className="hashtag-input"
-          placeholder="Provide hashtags for note"
-          value={hashtags}
-          onChange={(e) => setHashtags(e.target.value)}
-        ></input>
+        {hashtags &&
+          hashtags
+            .split(" ")
+            .map((ht, idx) => (
+              <HashtagComponent
+                initialHashtag={ht}
+                allHashtags={hashtags}
+                isActiveDefault={ht.length === 1 ? false : true}
+                setHashtags={setHashtags}
+                setEditIsFinished={setIsEditFinished}
+                key={idx}
+              />
+            ))}
 
-        {formErrors.hashtagError && (
-          <div className="tooltip">{formErrors.hashtagError}</div>
+        <i className="bi bi-plus-circle-fill icon" onClick={addNewHashtag}></i>
+
+        {errors.hashtagError && (
+          <div className="tooltip">{errors.hashtagError}</div>
         )}
       </div>
 
@@ -151,10 +140,10 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
           className="content-textarea"
           placeholder="Provide text for note"
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => handleContentChange(e.target.value)}
         ></textarea>
-        {formErrors.contentError && (
-          <div className="tooltip">{formErrors.contentError}</div>
+        {errors.contentError && (
+          <div className="tooltip">{errors.contentError}</div>
         )}
       </div>
 
@@ -162,7 +151,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
         <button
           className="submit-btn"
           type="button"
-          onClick={() => onFormSubmit(onSubmitCallback, note)}
+          onClick={() => formSubmit(onSubmitCallback, note)}
         >
           Submit
         </button>
