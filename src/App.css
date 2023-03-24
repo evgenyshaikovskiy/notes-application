@@ -1,4 +1,35 @@
 .App {
   display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.notes-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-left: 90px;
+  margin-right: 90px;
+  padding: 25px;
+  margin-top: 70px;
+  margin-bottom: 30px;
+  border: 2px solid black;
+  overflow: scroll;
+}
+
+.note-create-container {
+  display: flex;
   justify-content: center;
+}
+
+.note-create-btn {
+  width: 200px;
+  height: 100px;
+  font-size: large;
+  font-weight: 700;
+}
+
+/*Common styles*/
+.icon:hover, .action-icon:hover, .btn:hover {
+  cursor: pointer;
 }

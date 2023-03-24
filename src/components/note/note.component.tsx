@@ -12,9 +12,25 @@ export const NoteComponent = ({ note }: { note: Note }) => {
 
   return (
     <>
-      <div className="note-content-wrapper">
-        <div className="note-hashtags-list">{note.hashtags.join(" ")}</div>
-        <div className="note-content">{note.content}</div>
+      <div className="note-component-wrapper">
+        <div className="note-hashtags-list-wrapper">
+          <div className="note-hashtags-list-title">Hashtags:</div>
+          <div className="note-hashtags-list">{note.hashtags.join(" ")}</div>
+        </div>
+        <div className="note-content-wrapper">
+          <div className="note-content-title">Message: </div>
+          <div className="note-content">
+            {note.content.split(" ").map((value, idx) =>
+              value.startsWith("#") ? (
+                <p className="highlight" key={idx}>
+                  {value} {" "}
+                </p>
+              ) : (
+                value + " "
+              )
+            )}
+          </div>
+        </div>
         <div className="note-action-icons">
           <i
             className="bi bi-pen action-icon"

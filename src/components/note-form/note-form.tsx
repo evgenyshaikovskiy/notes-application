@@ -141,6 +141,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
                 setHashtags={setHashtags}
                 setEditIsFinished={setIsEditFinished}
                 key={idx}
+                setErrors={setErrors}
               />
             ))
         ) : (

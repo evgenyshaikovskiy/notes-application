@@ -29,7 +29,7 @@ export const validateContent = (content: string) => {
 };
 
 export const validateHashtag = (hashtag: string) => {
-  if (!hashtag) {
+  if (!hashtag || hashtag.length < 2) {
     return "Hashtag cannot be empty.";
   } else if (!hashtag.startsWith("#")) {
     return `Hashtag must start within '#' symbol.`;
@@ -37,7 +37,7 @@ export const validateHashtag = (hashtag: string) => {
     return "Hashtag cannot contain whitespace.";
   }
 
-  return '';
+  return "";
 };
 
 export const validateHashtags = (hashtags: string) => {
@@ -56,7 +56,8 @@ export const validateHashtags = (hashtags: string) => {
       .filter((word) => word.length !== 0)
       .every((word) => word.length > 1)
   ) {
-    return `Please, do not create empty hashtags.`;
+    return "";
+    // return `Please, do not create empty hashtags.`;
   }
 
   return "";

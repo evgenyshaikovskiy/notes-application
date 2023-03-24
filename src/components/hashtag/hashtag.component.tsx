@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import "./hashtag.styles.css";
 import { validateHashtag } from "../../utils";
+import { NoteFormErrors } from "../../types";
 
 type HashtagComponentProps = {
   initialHashtag: string;
@@ -9,6 +10,7 @@ type HashtagComponentProps = {
   isActiveDefault: boolean;
   setHashtags: (value: string) => void;
   setEditIsFinished: (value: boolean) => void;
+  setErrors: React.Dispatch<React.SetStateAction<NoteFormErrors>>;
 };
 
 export const HashtagComponent = ({
@@ -17,12 +19,14 @@ export const HashtagComponent = ({
   isActiveDefault,
   setEditIsFinished,
   setHashtags,
+  setErrors,
 }: HashtagComponentProps) => {
   const [hashtag, setHashtag] = useState<string>(initialHashtag);
   const [isBlocked, setIsBlocked] = useState<boolean>(isActiveDefault);
 
   const submitHashtag = () => {
     const error = validateHashtag(hashtag);
+    console.log(error);
     if (!error) {
       setIsBlocked(true);
       setEditIsFinished(true);
@@ -32,6 +36,15 @@ export const HashtagComponent = ({
           .map((value) => (value === initialHashtag ? hashtag.trim() : value))
           .join(" ")
       );
+      setErrors((prevState) => ({
+        ...prevState,
+        hashtagError: "",
+      }));
+    } else {
+      setErrors((prevState) => ({
+        ...prevState,
+        hashtagError: error,
+      }));
     }
   };
 

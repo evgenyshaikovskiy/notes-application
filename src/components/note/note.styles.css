@@ -1,3 +1,42 @@
-.action-icon:hover {
-  cursor: pointer;
+.note-component-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 300px;
 }
+
+.note-hashtags-list-title {
+  margin-right: 2px;
+}
+
+.note-hashtags-list {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.highlight {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.note-content-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.note-content-title {
+  display: flex;
+  align-content: flex-start;
+  width: 100%;
+}
+
+.note-content {
+  /*For text inside message*/
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
