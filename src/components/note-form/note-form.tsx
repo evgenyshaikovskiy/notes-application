@@ -45,8 +45,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   };
 
   const addNewHashtag = () => {
-    setHashtags(hashtags.concat(" #"));
-    console.log(hashtags);
+    setHashtags(hashtags !== "" ? hashtags.concat(" #") : "#");
   };
 
   // utility
@@ -70,16 +69,33 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   useEffect(() => {
     const mergingDelayTimer = setTimeout(() => {
       mergeHashtagsFromContent();
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(mergingDelayTimer);
   }, [content]);
 
-  const formSubmit = (onSubmitCallback: () => void, note?: Note) => {
-    console.log(hashtags);
+  useEffect(() => {
+    const hashtagValidationDelayTimer = setTimeout(() => {
+      if (hashtags) {
+        const hashtagError = validateHashtags(hashtags);
+        if (hashtagError) {
+          setErrors((prevState) => ({
+            ...prevState,
+            hashtagError: hashtagError,
+          }));
+        }
+      }
+    }, 100);
 
+    return () => clearTimeout(hashtagValidationDelayTimer);
+  }, [hashtags]);
+
+  const formSubmit = (onSubmitCallback: () => void, note?: Note) => {
     if (!isEditFinished) {
-      console.log("didnt finish all hashtags");
+      setErrors((prevState) => ({
+        ...prevState,
+        hashtagError: "Finish editing all hashtags before submitting.",
+      }));
       return;
     }
 
@@ -114,7 +130,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   return (
     <div className="note-form-wrapper">
       <div className="hashtag-input-wrapper">
-        {hashtags &&
+        {hashtags !== "" ? (
           hashtags
             .split(" ")
             .map((ht, idx) => (
@@ -126,7 +142,10 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
                 setEditIsFinished={setIsEditFinished}
                 key={idx}
               />
-            ))}
+            ))
+        ) : (
+          <></>
+        )}
 
         <i className="bi bi-plus-circle-fill icon" onClick={addNewHashtag}></i>
 
