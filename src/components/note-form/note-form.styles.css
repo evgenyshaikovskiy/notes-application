@@ -1,0 +1,68 @@
+.note-form-wrapper {
+  width: 800px;
+  height: 500px;
+  overflow-y: scroll;
+}
+
+.hashtag-section-wrapper {
+  height: 200px;
+  width: 800px;
+}
+
+.hashtag-input-wrapper {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.content-input-container {
+  width: 300px;
+  height: 300px;
+  position: relative;
+}
+
+.content-input {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  background: transparent;
+  text-decoration: none;
+  -webkit-text-fill-color: transparent;
+  caret-color: transparent;
+  z-index: 50;
+  visibility: none;
+  display: flex;
+  justify-content: flex-start;
+  outline: 0;
+  border: none;
+  resize: none;
+}
+
+.content-input::selection {
+  visibility: hidden;
+}
+
+.content-renderer {
+  position: absolute;
+  overflow-y: scroll;
+
+  height: 100%;
+  width: 100%;
+  white-space: initial;
+  word-wrap: break-word;
+
+  z-index: 10;
+  padding: 5px;
+
+  border: 1px solid black;
+}
+
+.highlight {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  text-decoration: solid;
+  font-weight: 600;
+  color: blue;
+}

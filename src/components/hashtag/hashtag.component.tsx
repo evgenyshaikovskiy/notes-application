@@ -26,7 +26,6 @@ export const HashtagComponent = ({
 
   const submitHashtag = () => {
     const error = validateHashtag(hashtag);
-    console.log(error);
     if (!error) {
       setIsBlocked(true);
       setEditIsFinished(true);

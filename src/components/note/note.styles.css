@@ -3,6 +3,7 @@
   flex-direction: column;
   overflow-y: scroll;
   height: 300px;
+  margin-bottom: 10px;
 }
 
 .note-hashtags-list-title {
@@ -13,13 +14,6 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-}
-
-.highlight {
-  display: inline;
-  margin: 0;
-  padding: 0;
-  text-decoration: underline;
 }
 
 .note-content-wrapper {
@@ -35,8 +29,19 @@
 
 .note-content {
   /*For text inside message*/
-  display: flex;
   height: 100%;
   width: 100%;
+  white-space: initial;
+  word-wrap: break-word;
 }
+
+.highlight {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  text-decoration: solid;
+  font-weight: 600;
+  color: blue;
+}
+
 

@@ -9,6 +9,7 @@ import {
   validateHashtags,
   getDistinctValues,
   parseHashtags,
+  extractHashtag,
 } from "../../utils";
 import { StorageContext } from "../../contexts/storage.context";
 
@@ -129,39 +130,66 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
 
   return (
     <div className="note-form-wrapper">
-      <div className="hashtag-input-wrapper">
-        {hashtags !== "" ? (
-          hashtags
-            .split(" ")
-            .map((ht, idx) => (
-              <HashtagComponent
-                initialHashtag={ht}
-                allHashtags={hashtags}
-                isActiveDefault={ht.length === 1 ? false : true}
-                setHashtags={setHashtags}
-                setEditIsFinished={setIsEditFinished}
-                key={idx}
-                setErrors={setErrors}
-              />
-            ))
-        ) : (
-          <></>
-        )}
+      <div className="hashtag-section-wrapper">
+        <div className="hashtag-input-wrapper">
+          {hashtags !== "" ? (
+            hashtags
+              .split(" ")
+              .filter((h) => h !== "")
+              .map((ht, idx) => (
+                <HashtagComponent
+                  initialHashtag={ht}
+                  allHashtags={hashtags}
+                  isActiveDefault={ht.length === 1 ? false : true}
+                  setHashtags={setHashtags}
+                  setEditIsFinished={setIsEditFinished}
+                  key={idx}
+                  setErrors={setErrors}
+                />
+              ))
+          ) : (
+            <></>
+          )}
+        </div>
+        <div className="hashtag-section-actions">
+          <i
+            className="bi bi-plus-circle-fill icon"
+            onClick={addNewHashtag}
+          ></i>
 
-        <i className="bi bi-plus-circle-fill icon" onClick={addNewHashtag}></i>
-
-        {errors.hashtagError && (
-          <div className="tooltip">{errors.hashtagError}</div>
-        )}
+          {errors.hashtagError && (
+            <div className="tooltip">{errors.hashtagError}</div>
+          )}
+        </div>
       </div>
 
       <div className="content-textarea-wrapper">
-        <textarea
-          className="content-textarea"
-          placeholder="Provide text for note"
-          value={content}
-          onChange={(e) => handleContentChange(e.target.value)}
-        ></textarea>
+        <div className="content-input-container">
+          <input
+            className="content-input"
+            value={content}
+            onChange={(e) => handleContentChange(e.target.value)}
+          ></input>
+
+          <div className="content-renderer">
+            {content.split(" ").map((word, idx) => {
+              if (word.startsWith("#") && word !== "#") {
+                const [ht, remainder] = extractHashtag(word);
+
+                return (
+                  <>
+                    <span className="highlight" key={idx}>
+                      {ht}
+                    </span>
+                    {remainder}{" "}
+                  </>
+                );
+              } else {
+                return word + " ";
+              }
+            })}
+          </div>
+        </div>
         {errors.contentError && (
           <div className="tooltip">{errors.contentError}</div>
         )}

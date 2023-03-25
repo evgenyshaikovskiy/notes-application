@@ -22,9 +22,9 @@ export const NoteComponent = ({ note }: { note: Note }) => {
           <div className="note-content">
             {note.content.split(" ").map((value, idx) =>
               value.startsWith("#") ? (
-                <p className="highlight" key={idx}>
+                <span className="highlight" key={idx}>
                   {value} {" "}
-                </p>
+                </span>
               ) : (
                 value + " "
               )

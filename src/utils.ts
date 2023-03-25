@@ -4,7 +4,15 @@ export const parseHashtags = (text: string): string[] =>
     .split(" ")
     .map((word) => word.trim())
     .filter((word) => word.startsWith("#"))
-    .filter((hashtags) => hashtags.length > 1);
+    .filter((hashtags) => hashtags.length > 1)
+    .map((hashtag) => extractHashtag(hashtag)[0]);
+
+export const extractHashtag = (inputString: string): [string, string] => {
+  const match = inputString.match(/^(#[a-zA-Z0-9]+)(.*)$/);
+  const before = match ? match[1] : "";
+  const after = match ? match[2] : "";
+  return [before, after];
+};
 
 export const getDistinctValues = (array: string[]) => {
   const copy = array.concat();
