@@ -2,7 +2,7 @@
 import "./note-form.styles.css";
 
 import { useContext, useEffect, useState } from "react";
-import { Note, NoteFormErrors } from "../../types";
+import { HashtagState, Note, NoteFormErrors } from "../../types";
 import { HashtagComponent } from "../hashtag/hashtag.component";
 import {
   validateContent,
@@ -12,6 +12,8 @@ import {
   extractHashtag,
 } from "../../utils";
 import { StorageContext } from "../../contexts/storage.context";
+
+import { ReactComponent as PlusIcon } from "./../../assets/plus-icon.svg";
 
 // if editing the note, then provide note
 // else creating the note
@@ -25,16 +27,19 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   const { editNote, addNote } = useContext(StorageContext);
 
   // states
-  const [hashtags, setHashtags] = useState<string>(
-    note ? note.hashtags.join(" ") : ""
+  const [hashtags, setHashtags] = useState<HashtagState[]>(
+    note
+      ? note.hashtags.map((ht) => {
+          return { hashtag: ht, isBlocked: true };
+        })
+      : []
   );
+
   const [content, setContent] = useState<string>(note ? note.content : "");
   const [errors, setErrors] = useState<NoteFormErrors>({
     hashtagError: "",
     contentError: "",
   });
-
-  const [isEditFinished, setIsEditFinished] = useState<boolean>(true);
 
   // handlers
   const handleContentChange = (content: string) => {
@@ -46,24 +51,33 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   };
 
   const addNewHashtag = () => {
-    setHashtags(hashtags !== "" ? hashtags.concat(" #") : "#");
+    setHashtags([...hashtags, { hashtag: "#", isBlocked: false }]);
   };
 
   // utility
   const mergeHashtagsFromContent = () => {
     if (content) {
-      const newHashtagValue = mergeHashtags();
-      setHashtags(newHashtagValue);
+      const newHashtags = mergeHashtags();
+      setHashtags([
+        ...newHashtags.map((ht) => {
+          const oldHt = hashtags.find((state) => state.hashtag === ht);
+          if (oldHt) {
+            return oldHt;
+          } else {
+            return { hashtag: ht, isBlocked: true };
+          }
+        }),
+      ]);
       setErrors((prevState) => ({
         ...prevState,
-        hashtagError: validateHashtags(newHashtagValue),
+        hashtagError: validateHashtags(newHashtags),
       }));
     }
   };
 
   const mergeHashtags = () =>
-    getDistinctValues(hashtags.split(" ").concat(parseHashtags(content))).join(
-      " "
+    getDistinctValues(
+      hashtags.map((state) => state.hashtag).concat(parseHashtags(content))
     );
 
   // merging tags from content input to hashtag input
@@ -78,7 +92,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   useEffect(() => {
     const hashtagValidationDelayTimer = setTimeout(() => {
       if (hashtags) {
-        const hashtagError = validateHashtags(hashtags);
+        const hashtagError = validateHashtags(hashtags.map((st) => st.hashtag));
         if (hashtagError) {
           setErrors((prevState) => ({
             ...prevState,
@@ -92,7 +106,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   }, [hashtags]);
 
   const formSubmit = (onSubmitCallback: () => void, note?: Note) => {
-    if (!isEditFinished) {
+    if (!hashtags.every((state) => state.isBlocked)) {
       setErrors((prevState) => ({
         ...prevState,
         hashtagError: "Finish editing all hashtags before submitting.",
@@ -115,13 +129,13 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
       // edit flow
       editNote({
         content: content,
-        hashtags: actualHashtagValue.split(" "),
+        hashtags: actualHashtagValue,
         id: note.id,
       });
     } else {
       // create flow
-      addNote(content, actualHashtagValue.split(" "));
-      setHashtags("");
+      addNote(content, actualHashtagValue);
+      setHashtags([]);
       setContent("");
     }
 
@@ -131,31 +145,29 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   return (
     <div className="note-form-wrapper">
       <div className="hashtag-section-wrapper">
-        <div className="hashtag-input-wrapper">
-          {hashtags !== "" ? (
-            hashtags
-              .split(" ")
-              .filter((h) => h !== "")
-              .map((ht, idx) => (
-                <HashtagComponent
-                  initialHashtag={ht}
-                  allHashtags={hashtags}
-                  isActiveDefault={ht.length === 1 ? false : true}
-                  setHashtags={setHashtags}
-                  setEditIsFinished={setIsEditFinished}
-                  key={idx}
-                  setErrors={setErrors}
-                />
-              ))
-          ) : (
-            <></>
-          )}
-        </div>
+        {hashtags ? (
+          <div className="hashtag-input-wrapper">
+            {hashtags.map((state, idx) => (
+              <HashtagComponent
+                initialHashtagValue={state.hashtag}
+                currentState={state}
+                allHashtags={hashtags}
+                setHashtags={setHashtags}
+                key={idx}
+                setErrors={setErrors}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="empty-hashtags-section-text">
+            To add hashtags click on icon below
+          </div>
+        )}
         <div className="hashtag-section-actions">
-          <i
-            className="bi bi-plus-circle-fill icon"
+          <PlusIcon
+            className="icon add-hashtag-icon"
             onClick={addNewHashtag}
-          ></i>
+          ></PlusIcon>
 
           {errors.hashtagError && (
             <div className="tooltip">{errors.hashtagError}</div>
@@ -164,6 +176,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
       </div>
 
       <div className="content-textarea-wrapper">
+        <div className="content-input-title">Type note text in box below.</div>
         <div className="content-input-container">
           <input
             className="content-input"
@@ -197,7 +210,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
 
       <div className="submit-btn-wrapper">
         <button
-          className="submit-btn"
+          className="submit-btn btn"
           type="button"
           onClick={() => formSubmit(onSubmitCallback, note)}
         >

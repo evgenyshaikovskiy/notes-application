@@ -36,7 +36,7 @@ export const validateContent = (content: string) => {
   return "";
 };
 
-export const validateHashtag = (hashtag: string) => {
+export const validateHashtag = (hashtag: string): string => {
   if (!hashtag || hashtag.length < 2) {
     return "Hashtag cannot be empty.";
   } else if (!hashtag.startsWith("#")) {
@@ -48,27 +48,11 @@ export const validateHashtag = (hashtag: string) => {
   return "";
 };
 
-export const validateHashtags = (hashtags: string) => {
-  if (!hashtags) {
-    return "Hashtags are required to create the note.";
-  } else if (
-    !hashtags
-      .split(" ")
-      .filter((word) => word.length !== 0)
-      .every((word) => word.startsWith("#"))
-  ) {
-    return `Please, make sure that every hashtag has '#' before.`;
-  } else if (
-    !hashtags
-      .split(" ")
-      .filter((word) => word.length !== 0)
-      .every((word) => word.length > 1)
-  ) {
-    return "";
-    // return `Please, do not create empty hashtags.`;
-  }
-
-  return "";
+export const validateHashtags = (hashtags: string[]): string => {
+  const errors = hashtags
+    .map((ht) => validateHashtag(ht))
+    .filter((v) => v !== "");
+  return errors.length > 0 ? errors[0]: "";
 };
 
 // also possible

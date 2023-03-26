@@ -4,6 +4,11 @@ export interface Note {
   hashtags: string[];
 }
 
+export interface HashtagState {
+  isBlocked: boolean;
+  hashtag: string;
+}
+
 export interface NoteFormErrors {
   hashtagError: string;
   contentError: string;

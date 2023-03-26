@@ -2,38 +2,37 @@ import React, { useState } from "react";
 
 import "./hashtag.styles.css";
 import { validateHashtag } from "../../utils";
-import { NoteFormErrors } from "../../types";
+import { HashtagState, NoteFormErrors } from "../../types";
 
 type HashtagComponentProps = {
-  initialHashtag: string;
-  allHashtags: string;
-  isActiveDefault: boolean;
-  setHashtags: (value: string) => void;
-  setEditIsFinished: (value: boolean) => void;
+  initialHashtagValue: string;
+  currentState: HashtagState;
+  allHashtags: HashtagState[];
+  setHashtags: (value: HashtagState[]) => void;
   setErrors: React.Dispatch<React.SetStateAction<NoteFormErrors>>;
 };
 
 export const HashtagComponent = ({
-  initialHashtag,
+  currentState,
+  initialHashtagValue,
   allHashtags,
-  isActiveDefault,
-  setEditIsFinished,
   setHashtags,
   setErrors,
 }: HashtagComponentProps) => {
-  const [hashtag, setHashtag] = useState<string>(initialHashtag);
-  const [isBlocked, setIsBlocked] = useState<boolean>(isActiveDefault);
+  // could be refactored
+  const [hashtag, setHashtag] = useState<string>(initialHashtagValue);
+  const [isBlocked, setIsBlocked] = useState<boolean>(currentState.isBlocked);
 
   const submitHashtag = () => {
     const error = validateHashtag(hashtag);
     if (!error) {
       setIsBlocked(true);
-      setEditIsFinished(true);
       setHashtags(
-        allHashtags
-          .split(" ")
-          .map((value) => (value === initialHashtag ? hashtag.trim() : value))
-          .join(" ")
+        allHashtags.map((value) =>
+          value.hashtag === initialHashtagValue
+            ? { hashtag: hashtag, isBlocked: true }
+            : value
+        )
       );
       setErrors((prevState) => ({
         ...prevState,
@@ -49,16 +48,12 @@ export const HashtagComponent = ({
 
   const startEditing = () => {
     setIsBlocked(false);
-    setEditIsFinished(false);
   };
 
   const removeHashtag = () => {
     if (isBlocked) {
       setHashtags(
-        allHashtags
-          .split(" ")
-          .filter((ht) => ht.trim() !== hashtag.trim())
-          .join(" ")
+        allHashtags.filter((ht) => ht.hashtag !== currentState.hashtag)
       );
     }
   };
