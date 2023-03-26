@@ -20,6 +20,8 @@
 .note-create-container {
   display: flex;
   justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .note-create-btn {
@@ -32,4 +34,8 @@
 /*Common styles*/
 .icon:hover, .action-icon:hover, .btn:hover {
   cursor: pointer;
+}
+
+.icon {
+  background-repeat: no-repeat;
 }

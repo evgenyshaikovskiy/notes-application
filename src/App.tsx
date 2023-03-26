@@ -11,12 +11,6 @@ function App() {
 
   return (
     <div className="App">
-      <div className="notes-container">
-        {notes.map((note) => {
-          return <NoteComponent note={note} key={note.id}></NoteComponent>;
-        })}
-      </div>
-
       <div className="note-create-container">
         <button
           type="button"
@@ -25,6 +19,11 @@ function App() {
         >
           Create note
         </button>
+      </div>
+      <div className="notes-container">
+        {notes.map((note) => {
+          return <NoteComponent note={note} key={note.id}></NoteComponent>;
+        })}
       </div>
 
       <ModalWindow visible={visible} setVisible={setVisible}>
