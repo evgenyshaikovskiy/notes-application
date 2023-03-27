@@ -18,9 +18,11 @@
   background-color: wheat;
 }
 
-.note-create-container {
+.note-actions-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   margin-top: 10px;
   margin-bottom: 10px;
 }

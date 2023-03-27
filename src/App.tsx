@@ -4,6 +4,7 @@ import { NoteComponent } from "./components/note/note.component";
 import { ModalWindow } from "./components/modal/modal.component";
 import { NoteForm } from "./components/note-form/note-form";
 import "./App.css";
+import { FilterComponent } from "./components/filter/filter.component";
 
 function App() {
   const { notes } = useContext(StorageContext);
@@ -11,7 +12,8 @@ function App() {
 
   return (
     <div className="App">
-      <div className="note-create-container">
+      <div className="note-actions-container">
+        <FilterComponent></FilterComponent>
         <button
           type="button"
           className="note-create-btn btn"

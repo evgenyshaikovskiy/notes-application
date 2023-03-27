@@ -19,17 +19,5 @@ export interface StorageContextType {
   addNote: (content: string, hashtags: string[]) => void;
   removeNote: (id: number) => void;
   editNote: (newNote: Note) => void;
-}
-
-export interface NoteContextType {
-  note?: Note;
-
-  hashtags: string;
-  content: string;
-  formErrors: NoteFormErrors;
-
-  setHashtags: (hashtags: string) => void;
-  setContent: (content: string) => void;
-
-  onFormSubmit: (submitCallback: () => void, note?: Note) => void;
+  setFilters: (filters: string[]) => void;
 }

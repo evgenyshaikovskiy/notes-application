@@ -1,0 +1,16 @@
+.filter-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.filter-input {
+  outline: 0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid black;
+  font-weight: 400;
+  font-size: larger;
+}

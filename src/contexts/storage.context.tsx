@@ -8,6 +8,7 @@ export const StorageContext = createContext<StorageContextType>({
   addNote: () => {},
   removeNote: () => {},
   editNote: () => {},
+  setFilters: () => {},
 });
 
 type StorageContextProviderProps = {
@@ -18,6 +19,7 @@ export const StorageContextProvider = ({
   children,
 }: StorageContextProviderProps) => {
   const [notes, setNotes] = useState<Note[]>([]);
+  const [filters, setFilters] = useState<string[]>([]);
 
   const baseUrlServer =
     "https://json-server-notes-application.herokuapp.com/notes";
@@ -26,11 +28,32 @@ export const StorageContextProvider = ({
     updateNotesFromStorage();
   }, []);
 
+  useEffect(() => {
+    console.log("filtering");
+    console.log(filters);
+    if (filters.length > 0 && filters.at(0) !== "") {
+      const filtered = notes.filter((note) => {
+        const noteHashtags = note.hashtags.join(" ").toLocaleLowerCase();
+        return filters
+          .map((filter) => noteHashtags.indexOf(filter.toLocaleLowerCase()))
+          .every((idx) => idx < 0)
+          ? false
+          : true;
+      });
+
+      setNotes([...filtered]);
+    } else {
+      updateNotesFromStorage();
+    }
+  }, [filters]);
+
   const updateNotesFromStorage = async () => {
     const response = await fetch(baseUrlServer, { method: "GET" });
 
     if (response.ok) {
       const data = await response.json();
+
+      // filtering process
       setNotes(data as Note[]);
     }
   };
@@ -86,6 +109,7 @@ export const StorageContextProvider = ({
     addNote,
     removeNote,
     editNote,
+    setFilters,
   };
 
   return (
