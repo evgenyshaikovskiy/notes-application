@@ -29,8 +29,6 @@ export const StorageContextProvider = ({
   }, []);
 
   useEffect(() => {
-    console.log("filtering");
-    console.log(filters);
     if (filters.length > 0 && filters.at(0) !== "") {
       const filtered = notes.filter((note) => {
         const noteHashtags = note.hashtags.join(" ").toLocaleLowerCase();
