@@ -8,6 +8,7 @@ import { ReactComponent as PenIcon } from "./../../assets/pen-icon.svg";
 import { ReactComponent as TrashIcon } from "./../../assets/trash-icon.svg";
 
 import "./note.styles.css";
+import { extractHashtag } from "../../utils";
 
 export const NoteComponent = ({ note }: { note: Note }) => {
   const { removeNote } = useContext(StorageContext);
@@ -23,15 +24,20 @@ export const NoteComponent = ({ note }: { note: Note }) => {
         <div className="note-content-wrapper">
           <div className="note-content-title">Message: </div>
           <div className="note-content">
-            {note.content.split(" ").map((value, idx) =>
-              value.startsWith("#") ? (
-                <span className="highlight" key={idx}>
-                  {value}{" "}
-                </span>
-              ) : (
-                value + " "
-              )
-            )}
+            {note.content.split(" ").map((word, idx) => {
+              if (word.startsWith("#") && word !== "#") {
+                const [ht, remainder] = extractHashtag(word);
+
+                return (
+                  <div key={idx} style={{ display: "inline" }}>
+                    <span className="highlight">{ht}</span>
+                    {remainder}{" "}
+                  </div>
+                );
+              } else {
+                return word + " ";
+              }
+            })}
           </div>
         </div>
         <div className="note-action-icons">

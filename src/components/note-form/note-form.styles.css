@@ -1,7 +1,6 @@
 .note-form-wrapper {
   width: 900px;
   height: 700px;
-  overflow-y: scroll;
 
   display: flex;
   justify-content: center;
@@ -28,7 +27,7 @@
   width: 800px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .hashtag-section-actions {
@@ -93,7 +92,7 @@
 
 .content-renderer {
   position: absolute;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   height: 100%;
   width: 100%;

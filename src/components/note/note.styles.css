@@ -1,9 +1,9 @@
 .note-component-wrapper {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   height: 300px;
   margin: 10px;
-  overflow-y: scroll;
   padding: 15px;
 
   background-color: azure;
@@ -12,32 +12,40 @@
 
 .note-hashtags-list-title {
   margin-right: 2px;
+  font-weight: 600;
+  font-size: larger;
 }
 
 .note-hashtags-list {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
+  text-decoration: solid;
+  font-weight: 600;
+  color: rgb(33, 33, 196);
 }
 
 .note-content-wrapper {
   display: flex;
   flex-direction: column;
+  padding-bottom: 5px;
 }
 
 .note-content-title {
   display: flex;
   align-content: flex-start;
+  font-weight: 600;
+  font-size: larger;
   width: 100%;
 }
 
 .note-content {
   /*For text inside message*/
-  height: 100%;
+  height: 160px;
   width: 100%;
   white-space: initial;
-  overflow-y: scroll; 
   word-wrap: break-word;
+  overflow-y: auto;
 }
 
 .highlight {
@@ -46,11 +54,10 @@
   padding: 0;
   text-decoration: solid;
   font-weight: 600;
-  color: blue;
+  color: rgb(33, 33, 196);
 }
 
 .note-action-icons {
-  margin-top: 10px;
   display: flex;
   justify-content: flex-start;
   align-items: center;

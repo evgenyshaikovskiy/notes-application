@@ -179,6 +179,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
         <div className="content-input-title">Type note text in box below.</div>
         <div className="content-input-container">
           <input
+            spellCheck={false}
             className="content-input"
             value={content}
             onChange={(e) => handleContentChange(e.target.value)}
@@ -190,12 +191,10 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
                 const [ht, remainder] = extractHashtag(word);
 
                 return (
-                  <>
-                    <span className="highlight" key={idx}>
-                      {ht}
-                    </span>
+                  <div key={idx} style={{ display: "inline" }}>
+                    <span className="highlight">{ht}</span>
                     {remainder}{" "}
-                  </>
+                  </div>
                 );
               } else {
                 return word + " ";

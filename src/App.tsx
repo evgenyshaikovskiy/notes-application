@@ -22,11 +22,20 @@ function App() {
           Create note
         </button>
       </div>
-      <div className="notes-container">
-        {notes.map((note) => {
-          return <NoteComponent note={note} key={note.id}></NoteComponent>;
-        })}
-      </div>
+      {notes.length > 0 ? (
+        <div className="notes-container">
+          {notes.map((note) => {
+            return <NoteComponent note={note} key={note.id}></NoteComponent>;
+          })}
+        </div>
+      ) : (
+        <div className="no-notes-text-msg">
+          No notes was found.
+          <div className="no-notes-advice-msg">
+            Remove filters or add new note.
+          </div>
+        </div>
+      )}
 
       <ModalWindow visible={visible} setVisible={setVisible}>
         <NoteForm onSubmitCallback={() => setVisible(false)}></NoteForm>

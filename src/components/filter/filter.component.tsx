@@ -18,10 +18,11 @@ export const FilterComponent = () => {
   return (
     <div className="filter-wrapper">
       <input
+        spellCheck={false}
         className="filter-input"
         type="text"
         value={filter}
-        placeholder="Type hashtag to filter notes"
+        placeholder="Type hashtag to filter"
         onChange={(e) => setFilter(e.target.value)}
       ></input>
     </div>

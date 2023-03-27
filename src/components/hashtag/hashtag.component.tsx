@@ -67,6 +67,7 @@ export const HashtagComponent = ({
   return (
     <div className="hashtag-wrapper">
       <input
+        spellCheck={false}
         type="text"
         className="hashtag-input"
         onChange={(e) => setHashtag(e.target.value)}
