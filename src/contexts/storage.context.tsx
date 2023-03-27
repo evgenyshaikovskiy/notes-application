@@ -19,56 +19,66 @@ export const StorageContextProvider = ({
 }: StorageContextProviderProps) => {
   const [notes, setNotes] = useState<Note[]>([]);
 
+  const baseUrlServer =
+    "https://json-server-notes-application.herokuapp.com/notes";
+
   useEffect(() => {
     updateNotesFromStorage();
   }, []);
 
-  const updateNotesFromStorage = () => {
-    const unparsed = localStorage.getItem("notes");
-    if (unparsed) {
-      setNotes(JSON.parse(unparsed));
+  const updateNotesFromStorage = async () => {
+    const response = await fetch(baseUrlServer, { method: "GET" });
+
+    if (response.ok) {
+      const data = await response.json();
+      setNotes(data as Note[]);
     }
   };
 
-  const findFirstFreeId = () => {
-    let currentId = 1;
-    const takenIds = new Set(notes.map((note) => note.id));
-    while (takenIds.has(currentId)) {
-      currentId++;
-    }
-
-    return currentId;
-  };
-
-  const addNote = (content: string, hashtags: string[]) => {
+  const addNote = async (content: string, hashtags: string[]) => {
     const newNote = {
       content: content,
       hashtags: hashtags,
-      id: findFirstFreeId(),
     };
-    localStorage.setItem("notes", JSON.stringify([...notes, newNote]));
+    console.log(newNote);
+
+    const response = await fetch(baseUrlServer, {
+      method: "POST",
+      headers: { "Content-Type": "application/json;charset=utf-8" },
+      body: JSON.stringify(newNote),
+    });
+
+    const result = await response.json();
+
+    if (result) {
+      console.log(`${result} was created successfully`);
+    }
     updateNotesFromStorage();
   };
 
-  const removeNote = (id: number) => {
-    localStorage.clear();
-    localStorage.setItem(
-      "notes",
-      JSON.stringify([...notes.filter((note) => note.id !== id)])
-    );
-    updateNotesFromStorage();
+  const removeNote = async (id: number) => {
+    const response = await fetch(baseUrlServer + `/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      console.log(`Item with id ${id} was deleted.`);
+      updateNotesFromStorage();
+    }
   };
 
-  const editNote = (newNote: Note) => {
-    localStorage.clear();
-    localStorage.setItem(
-      "notes",
-      JSON.stringify([
-        ...notes.filter((note) => note.id !== newNote.id),
-        newNote,
-      ])
-    );
-    updateNotesFromStorage();
+  const editNote = async (newNote: Note) => {
+    const body = { hashtags: newNote.hashtags, content: newNote.content };
+    const response = await fetch(baseUrlServer + `/${newNote.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json;charset=utf-8" },
+      body: JSON.stringify(body),
+    });
+
+    if (response.ok) {
+      console.log(`${newNote} was successfully updated.`);
+      updateNotesFromStorage();
+    }
   };
 
   const value = {
