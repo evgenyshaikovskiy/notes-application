@@ -49,10 +49,14 @@ export const validateHashtag = (hashtag: string): string => {
 };
 
 export const validateHashtags = (hashtags: string[]): string => {
+  if (hashtags.length === 0) {
+    return "Hashtags are required to create the note.";
+  }
+
   const errors = hashtags
     .map((ht) => validateHashtag(ht))
     .filter((v) => v !== "");
-  return errors.length > 0 ? errors[0]: "";
+  return errors.length > 0 ? errors[0] : "";
 };
 
 // also possible

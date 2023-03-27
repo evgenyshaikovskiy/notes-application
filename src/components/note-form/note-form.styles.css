@@ -61,6 +61,7 @@
   width: 800px;
   height: 300px;
   position: relative;
+  margin-bottom: 15px;
 }
 
 .content-input-title {
@@ -102,7 +103,8 @@
   z-index: 10;
   padding: 5px;
 
-  border: 1px solid black;
+  border: 3px solid black;
+  border-radius: 5px;
 }
 
 .highlight {
