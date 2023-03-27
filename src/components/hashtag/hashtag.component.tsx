@@ -76,17 +76,17 @@ export const HashtagComponent = ({
 
       <div className="icons-container">
         <CheckIcon
-          className="bi bi-check-lg icon hashtag-icon"
+          className="icon hashtag-icon"
           style={{ display: isBlocked ? "none" : "" }}
           onClick={submitHashtag}
         ></CheckIcon>
         <PenIcon
-          className="bi bi-pen icon hashtag-icon"
+          className="icon hashtag-icon"
           style={{ display: !isBlocked ? "none" : "" }}
           onClick={startEditing}
         ></PenIcon>
         <CircleIcon
-          className="bi bi-x icon hashtag-icon"
+          className="icon hashtag-icon"
           onClick={removeHashtag}
           style={{ display: !isBlocked ? "none" : "" }}
         ></CircleIcon>{" "}

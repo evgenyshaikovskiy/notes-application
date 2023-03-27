@@ -4,6 +4,9 @@ import { StorageContext } from "../../contexts/storage.context";
 import { ModalWindow } from "../modal/modal.component";
 import { NoteForm } from "../note-form/note-form";
 
+import { ReactComponent as PenIcon } from "./../../assets/pen-icon.svg";
+import { ReactComponent as TrashIcon } from "./../../assets/trash-icon.svg";
+
 import "./note.styles.css";
 
 export const NoteComponent = ({ note }: { note: Note }) => {
@@ -23,7 +26,7 @@ export const NoteComponent = ({ note }: { note: Note }) => {
             {note.content.split(" ").map((value, idx) =>
               value.startsWith("#") ? (
                 <span className="highlight" key={idx}>
-                  {value} {" "}
+                  {value}{" "}
                 </span>
               ) : (
                 value + " "
@@ -32,14 +35,14 @@ export const NoteComponent = ({ note }: { note: Note }) => {
           </div>
         </div>
         <div className="note-action-icons">
-          <i
-            className="bi bi-pen action-icon"
+          <PenIcon
+            className="icon note-icon"
             onClick={() => setVisible(true)}
-          ></i>
-          <i
-            className="bi bi-trash action-icon"
+          ></PenIcon>
+          <TrashIcon
+            className="icon note-icon"
             onClick={() => removeNote(note.id)}
-          ></i>
+          ></TrashIcon>
         </div>
       </div>
       <ModalWindow visible={visible} setVisible={setVisible}>

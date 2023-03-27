@@ -8,13 +8,14 @@
 .notes-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin-left: 90px;
-  margin-right: 90px;
   padding: 25px;
-  margin-top: 70px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
   border: 2px solid black;
   overflow: scroll;
+
+  background-color: wheat;
 }
 
 .note-create-container {
@@ -25,10 +26,10 @@
 }
 
 .note-create-btn {
-  width: 200px;
-  height: 100px;
-  font-size: large;
-  font-weight: 700;
+  width: 100px;
+  height: 50px;
+  font-size: medium;
+  font-weight: 400;
 }
 
 /*Common styles*/
