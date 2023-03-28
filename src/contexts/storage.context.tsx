@@ -32,7 +32,6 @@ export const StorageContextProvider = ({
     const performFiltering = async () => {
       const allNotes = await getNotesFromStorage();
       if (filters.length > 0 && filters.at(0) !== "") {
-        console.log("need for filter");
         const filtered = allNotes.filter((note) => {
           const noteHashtags = note.hashtags.join(" ").toLocaleLowerCase();
           return filters
