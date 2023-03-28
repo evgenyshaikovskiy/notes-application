@@ -29,30 +29,42 @@ export const StorageContextProvider = ({
   }, []);
 
   useEffect(() => {
-    if (filters.length > 0 && filters.at(0) !== "") {
-      const filtered = notes.filter((note) => {
-        const noteHashtags = note.hashtags.join(" ").toLocaleLowerCase();
-        return filters
-          .map((filter) => noteHashtags.indexOf(filter.toLocaleLowerCase()))
-          .every((idx) => idx < 0)
-          ? false
-          : true;
-      });
+    const performFiltering = async () => {
+      const allNotes = await getNotesFromStorage();
+      if (filters.length > 0 && filters.at(0) !== "") {
+        console.log("need for filter");
+        const filtered = allNotes.filter((note) => {
+          const noteHashtags = note.hashtags.join(" ").toLocaleLowerCase();
+          return filters
+            .map((filter) => noteHashtags.indexOf(filter.toLocaleLowerCase()))
+            .every((idx) => idx < 0)
+            ? false
+            : true;
+        });
 
-      setNotes([...filtered]);
-    } else {
-      updateNotesFromStorage();
-    }
+        setNotes([...filtered]);
+      } else {
+        updateNotesFromStorage();
+      }
+    };
+
+    performFiltering();
   }, [filters]);
 
   const updateNotesFromStorage = async () => {
+    const data = await getNotesFromStorage();
+    setNotes([...data]);
+  };
+
+  const getNotesFromStorage = async () => {
     const response = await fetch(baseUrlServer, { method: "GET" });
 
     if (response.ok) {
       const data = await response.json();
 
-      // filtering process
-      setNotes(data as Note[]);
+      return data as Note[];
+    } else {
+      return [];
     }
   };
 
