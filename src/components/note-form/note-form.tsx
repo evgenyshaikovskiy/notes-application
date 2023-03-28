@@ -91,7 +91,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
 
   useEffect(() => {
     const hashtagValidationDelayTimer = setTimeout(() => {
-      if (hashtags) {
+      if (hashtags.length) {
         const hashtagError = validateHashtags(hashtags.map((st) => st.hashtag));
         if (hashtagError) {
           setErrors((prevState) => ({

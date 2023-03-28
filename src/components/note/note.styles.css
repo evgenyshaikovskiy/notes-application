@@ -23,6 +23,8 @@
   text-decoration: solid;
   font-weight: 600;
   color: rgb(33, 33, 196);
+  height: 40px;
+  overflow-y: auto;
 }
 
 .note-content-wrapper {
