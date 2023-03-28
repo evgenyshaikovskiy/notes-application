@@ -15,10 +15,11 @@ export const extractHashtag = (inputString: string): [string, string] => {
 };
 
 export const getDistinctValues = (array: string[]) => {
+  console.log(array, "here");
   const copy = array.concat();
   for (let i = 0; i < copy.length; ++i) {
     for (let j = i + 1; j < copy.length; ++j) {
-      if (copy[i] === copy[j]) {
+      if (copy[i] === copy[j] && copy[i].length !== 1) {
         copy.splice(j--, 1);
       }
     }
