@@ -77,14 +77,21 @@
   background: transparent;
   text-decoration: none;
   -webkit-text-fill-color: transparent;
-  caret-color: transparent;
   z-index: 50;
   visibility: none;
   display: flex;
   justify-content: flex-start;
   outline: 0;
+  white-space: break-spaces;
   border: none;
   resize: none;
+  font-size: 16px;
+  line-height: 16px;
+  box-sizing: border-box;
+  letter-spacing: 1px;
+  word-wrap: break-word;
+  font-family:'Courier New', Courier, monospace;
+  padding: 5px;
 }
 
 .content-input::selection {
@@ -92,15 +99,19 @@
 }
 
 .content-renderer {
+  font-family:'Courier New', Courier, monospace;
+  line-height: 16px;
+  letter-spacing: 1px;
   position: absolute;
   overflow-y: auto;
-
   height: 100%;
   width: 100%;
   white-space: initial;
   word-wrap: break-word;
 
   z-index: 10;
+  font-size: 16px;
+  line-height: normal;
   padding: 5px;
 
   border: 3px solid black;
@@ -117,10 +128,10 @@
 }
 
 .submit-btn-wrapper {
- display: flex;
- justify-content: center;
- align-items: center;
- margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .submit-btn {
@@ -160,7 +171,8 @@
     width: 600px;
   }
 
-  .content-input-container, .content-input {
+  .content-input-container,
+  .content-input {
     width: 600px;
     height: 100px;
   }
@@ -219,7 +231,8 @@
     grid-template-columns: repeat(3, minmax(80px, 1fr));
   }
 
-  .content-input-container, .content-input {
+  .content-input-container,
+  .content-input {
     width: 300px;
     height: 100px;
   }

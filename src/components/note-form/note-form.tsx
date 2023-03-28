@@ -178,12 +178,12 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
       <div className="content-textarea-wrapper">
         <div className="content-input-title">Type note text in box below.</div>
         <div className="content-input-container">
-          <input
+          <textarea
             spellCheck={false}
             className="content-input"
             value={content}
             onChange={(e) => handleContentChange(e.target.value)}
-          ></input>
+          ></textarea>
 
           <div className="content-renderer">
             {content.split(" ").map((word, idx) => {
