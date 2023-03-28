@@ -82,14 +82,12 @@
   display: flex;
   justify-content: flex-start;
   outline: 0;
-  white-space: break-spaces;
   border: none;
   resize: none;
   font-size: 16px;
   line-height: 16px;
   box-sizing: border-box;
   letter-spacing: 1px;
-  word-wrap: break-word;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   padding: 5px;
   border: 3px solid black;
@@ -109,7 +107,7 @@
 
   z-index: 10;
   font-size: 16px;
-  line-height: normal;
+  line-height: 16px;
   padding: 5px;
 
   border: 3px solid black;
