@@ -145,7 +145,7 @@ export const NoteForm = ({ note, onSubmitCallback }: NoteFormProps) => {
   return (
     <div className="note-form-wrapper">
       <div className="hashtag-section-wrapper">
-        {hashtags ? (
+        {hashtags.length ? (
           <div className="hashtag-input-wrapper">
             {hashtags.map((state, idx) => (
               <HashtagComponent

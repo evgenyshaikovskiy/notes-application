@@ -134,3 +134,107 @@
 .submit-btn:hover {
   background-color: azure;
 }
+
+@media screen and (max-width: 1200px) {
+  .note-form-wrapper {
+    width: 700px;
+    height: 400px;
+    justify-content: flex-start;
+  }
+
+  .hashtag-section-wrapper {
+    height: 200px;
+    width: 600px;
+  }
+
+  .hashtag-section-actions {
+    height: 100px;
+  }
+
+  .empty-hashtags-section-text {
+    height: 50px;
+  }
+
+  .hashtag-input-wrapper {
+    height: 70px;
+    width: 600px;
+  }
+
+  .content-input-container, .content-input {
+    width: 600px;
+    height: 100px;
+  }
+
+  .submit-btn {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .note-form-wrapper {
+    width: 400px;
+    height: 400px;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .hashtag-section-wrapper {
+    height: 200px;
+    width: 300px;
+  }
+
+  .empty-hashtags-section-text {
+    height: 50px;
+  }
+
+  .hashtag-section-actions {
+    height: 100px;
+  }
+
+  .hashtag-input-wrapper {
+    height: 50px;
+  }
+
+  .empty-hashtags-section-text {
+    height: 20px;
+    font-size: medium;
+  }
+
+  .hashtag-section-actions {
+    gap: 5px;
+    height: 90px;
+  }
+
+  .content-textarea-wrapper {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hashtag-input-wrapper {
+    height: 50px;
+    width: 300px;
+    grid-template-columns: repeat(3, minmax(80px, 1fr));
+  }
+
+  .content-input-container, .content-input {
+    width: 300px;
+    height: 100px;
+  }
+
+  .add-hashtag-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .content-input-title {
+    font-size: medium;
+  }
+
+  .submit-btn {
+    width: 100px;
+    height: 40px;
+  }
+}

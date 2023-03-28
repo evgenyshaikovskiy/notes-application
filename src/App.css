@@ -16,7 +16,7 @@
 
 .notes-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
   padding: 25px;
   margin-left: 2px;
   margin-right: 2px;
@@ -78,4 +78,11 @@
 
 .icon {
   background-repeat: no-repeat;
+}
+
+/*Breakpoints*/
+@media screen and (max-width: 1200px) {
+  .notes-container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
 }
