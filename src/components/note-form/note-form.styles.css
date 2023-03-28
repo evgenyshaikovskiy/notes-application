@@ -90,16 +90,14 @@
   box-sizing: border-box;
   letter-spacing: 1px;
   word-wrap: break-word;
-  font-family:'Courier New', Courier, monospace;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   padding: 5px;
-}
-
-.content-input::selection {
-  visibility: hidden;
+  border: 3px solid black;
+  border-radius: 5px;
 }
 
 .content-renderer {
-  font-family:'Courier New', Courier, monospace;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   line-height: 16px;
   letter-spacing: 1px;
   position: absolute;
