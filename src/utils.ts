@@ -15,7 +15,6 @@ export const extractHashtag = (inputString: string): [string, string] => {
 };
 
 export const getDistinctValues = (array: string[]) => {
-  console.log(array, "here");
   const copy = array.concat();
   for (let i = 0; i < copy.length; ++i) {
     for (let j = i + 1; j < copy.length; ++j) {
